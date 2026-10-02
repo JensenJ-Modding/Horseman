@@ -1,6 +1,7 @@
 package io.github.mortuusars.horseman.neoforge;
 
 import com.mojang.brigadier.arguments.ArgumentType;
+import com.mojang.serialization.MapCodec;
 import io.github.mortuusars.horseman.Horseman;
 import io.github.mortuusars.horseman.Register;
 import net.minecraft.advancements.triggers.CriterionTrigger;
@@ -26,7 +27,6 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.levelgen.feature.Feature;
-import net.minecraft.world.level.levelgen.feature.configurations.FeatureConfiguration;
 import net.neoforged.neoforge.common.extensions.IMenuTypeExtension;
 import net.neoforged.neoforge.registries.DeferredRegister;
 
@@ -45,7 +45,7 @@ public class RegisterImpl {
     public static final DeferredRegister<RecipeSerializer<?>> RECIPE_SERIALIZERS = DeferredRegister.create(Registries.RECIPE_SERIALIZER, Horseman.ID);
     public static final DeferredRegister<CriterionTrigger<?>> CRITERION_TRIGGERS = DeferredRegister.create(Registries.TRIGGER_TYPE, Horseman.ID);
     public static final DeferredRegister<ArgumentTypeInfo<?, ?>> COMMAND_ARGUMENT_TYPES = DeferredRegister.create(Registries.COMMAND_ARGUMENT_TYPE, Horseman.ID);
-    public static final DeferredRegister<Feature<?>> WORLD_GEN_FEATURES = DeferredRegister.create(Registries.FEATURE, Horseman.ID);
+    public static final DeferredRegister<MapCodec<? extends Feature>> WORLD_GEN_FEATURE_TYPES = DeferredRegister.create(Registries.FEATURE_TYPE, Horseman.ID);
     public static final DeferredRegister.DataComponents DATA_COMPONENT_TYPES = DeferredRegister.createDataComponents(Registries.DATA_COMPONENT_TYPE, Horseman.ID);
     public static final DeferredRegister<ParticleType<?>> PARTICLE_TYPES = DeferredRegister.create(Registries.PARTICLE_TYPE, Horseman.ID);
     public static final DeferredRegister<Identifier> CUSTOM_STATS = DeferredRegister.create(Registries.CUSTOM_STAT, Horseman.ID);
@@ -111,8 +111,9 @@ public class RegisterImpl {
                 () -> ArgumentTypeInfos.registerByClass(infoClass, argumentTypeInfo));
     }
 
-    public static <T extends FeatureConfiguration> Supplier<Feature<?>> worldGenFeature(String name, Supplier<Feature<T>> featureSupplier) {
-        return WORLD_GEN_FEATURES.register(name, featureSupplier);
+    public static <F extends Feature> Supplier<MapCodec<? extends Feature>> worldGenFeatureType(
+            String name, Supplier<MapCodec<F>> codecSupplier) {
+        return WORLD_GEN_FEATURE_TYPES.register(name, codecSupplier);
     }
 
     public static <T> DataComponentType<T> dataComponentType(String name, Consumer<DataComponentType.Builder<T>> builderConsumer) {

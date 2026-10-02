@@ -127,7 +127,6 @@ subprojects {
         runs {
             client {
                 programArgs "--username", "Dev"
-                vmArgs '-XX:+AllowEnhancedClassRedefinition', '-XX:HotswapAgent=fatjar'
             }
 
             register("client2") {

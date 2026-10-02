@@ -8,7 +8,7 @@ import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.client.gui.screens.inventory.InventoryScreen;
 import org.jetbrains.annotations.Nullable;
-import org.lwjgl.glfw.GLFW;
+import org.lwjgl.sdl.SDLMouse;
 
 public class SwitchInventory {
     public static final WidgetSprites SWITCH_BUTTON_LEFT_SPRITES = new WidgetSprites(
@@ -39,7 +39,7 @@ public class SwitchInventory {
 
         // Move cursor to previous position, as setScreen resets it to center every time:
         Minecraft.getInstance().execute(() -> {
-            GLFW.glfwSetCursorPos(Minecraft.getInstance().getWindow().handle(), cursorX, cursorY);
+            SDLMouse.SDL_WarpMouseInWindow(Minecraft.getInstance().getWindow().handle(), (float) cursorX, (float) cursorY);
         });
     }
 
@@ -56,7 +56,7 @@ public class SwitchInventory {
 
     public static void restoreMousePosIfNeeded() {
         if (SwitchInventory.mouseX != null && SwitchInventory.mouseY != null) {
-            GLFW.glfwSetCursorPos(Minecraft.getInstance().getWindow().handle(), SwitchInventory.mouseX, SwitchInventory.mouseY);
+            SDLMouse.SDL_WarpMouseInWindow(Minecraft.getInstance().getWindow().handle(), SwitchInventory.mouseX.floatValue(), SwitchInventory.mouseY.floatValue());
             // Clear remembered cursor pos after setting, to not apply it again when not needed:
             SwitchInventory.mouseX = null;
             SwitchInventory.mouseY = null;
